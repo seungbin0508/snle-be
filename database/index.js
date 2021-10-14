@@ -39,3 +39,5 @@ create table IF NOT EXISTS user
 } finally {
 	connection.release()
 }
+
+export default connection
