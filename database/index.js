@@ -1,9 +1,11 @@
 import mysql from 'mysql2/promise.js'
+import dotenv from 'dotenv'
 
+dotenv.config()
 const pool = mysql.createPool({
-	host: 'localhost',
-	user: 'test',
-	password: 'test',
+	host: 'snle.chwz13ezrqql.ap-northeast-2.rds.amazonaws.com',
+	user: 'admin',
+	password: process.env.MYSQLPASSWORD,
 })
 
 const connection = await pool.getConnection()
@@ -26,7 +28,8 @@ create table IF NOT EXISTS user
 	withdrawal date null,
 	participation smallint default 100 null,
 	admin tinyint(1) default 0 null,
-	password varchar(20) null
+	password varchar(20) null,
+    salt char(64) null
 );`
 	await connection.query(createDatabase)
 	await connection.query(useDatabase)
@@ -39,3 +42,5 @@ create table IF NOT EXISTS user
 } finally {
 	connection.release()
 }
+
+export default connection
