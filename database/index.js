@@ -28,7 +28,7 @@ create table IF NOT EXISTS user
 	withdrawal date null,
 	participation smallint default 100 null,
 	admin tinyint(1) default 0 null,
-	password varchar(20) null,
+	password varchar(64) null,
     salt char(64) null
 );`
 	await connection.query(createDatabase)
