@@ -1,8 +1,12 @@
 import db from './index.js'
 import Crypto from '../util/crypto.js'
 
-
 export default class UserTable {
+	/**
+	 * Insert a user into user table
+	 * @param user {Object}
+	 * @returns {Promise<void>}
+	 */
 	static async createUser (user) {
 		const query = `
             INSERT INTO user(name, nickname, phone, enlist, password, salt)
@@ -12,8 +16,9 @@ export default class UserTable {
 
 		try {
 			const { encryptedPassword, salt } = await Crypto.encryptWithSalt(password)
-			await db.query(`DELETE FROM user`)
+			await db.beginTransaction()
 			await db.query(query, [name, nickname, phone, enlist, encryptedPassword, salt])
+			await db.commit()
 		} catch (err) {
 			console.error(err)
 			await db.rollback()
