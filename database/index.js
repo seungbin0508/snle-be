@@ -1,9 +1,11 @@
 import mysql from 'mysql2/promise.js'
+import dotenv from 'dotenv'
 
+dotenv.config()
 const pool = mysql.createPool({
-	host: 'localhost',
-	user: 'test',
-	password: 'test',
+	host: 'snle.chwz13ezrqql.ap-northeast-2.rds.amazonaws.com',
+	user: 'admin',
+	password: process.env.MYSQLPASSWORD,
 })
 
 const connection = await pool.getConnection()
