@@ -27,14 +27,47 @@ export default class UserTable {
 			db.release()
 		}
 	}
-}
 
-const user = {
-	name: '승빈',
-	nickname: 'John',
-	phone: '01090277906',
-	enlist: new Date(),
-	password: '12345'
-}
+	/**
+	 * Find a user by phone number
+	 * @param phone {string}
+	 * @returns {Promise<Object>}
+	 */
+	static async findOneUserByPhone (phone) {
+		const query = `
+			SELECT * FROM user WHERE phone = ?;
+		`
+		try {
+			await db.beginTransaction()
+			const [[result]] = await db.query(query, [phone])
+			await db.commit()
+			return result
+		} catch (err) {
+			console.error(err)
+			await db.rollback()
+		} finally {
+			db.release()
+		}
+	}
 
-await UserTable.createUser(user)
+	/**
+	 * Find all users from user table
+	 * @returns {Promise<Object[]>}
+	 */
+	static async findAllUsers () {
+		const query = `
+			SELECT * FROM user;
+		`
+		try {
+			await db.beginTransaction()
+			const [result] = await db.query(query)
+			await db.commit()
+			return result
+		} catch (err) {
+			console.error(err)
+			await db.rollback()
+		} finally {
+			db.release()
+		}
+	}
+}
