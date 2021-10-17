@@ -70,4 +70,28 @@ export default class UserTable {
 			db.release()
 		}
 	}
+
+	/**
+	 * @param phone {string}
+	 * @param field {('nickname' | 'phone')}
+	 * @param content {string} updated value
+	 * @returns {Promise<void>}
+	 */
+	static async updateUser (phone, field, content) {
+		const query = `
+            UPDATE user
+            SET ${field} = "${content}"
+            WHERE phone = ${phone}
+		`
+		try {
+			await db.beginTransaction()
+			await db.query(query)
+			await db.commit()
+		} catch (err) {
+			console.error(err)
+			await db.rollback()
+		} finally {
+			db.release()
+		}
+	}
 }
