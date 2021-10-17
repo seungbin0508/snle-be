@@ -15,9 +15,11 @@ export default class UserTable {
 		const { name, nickname, phone, enlist, password } = user
 
 		try {
-			const { encryptedPassword, salt } = await Crypto.encryptWithSalt(password)
+			const { encryptedPassword, salt } = await Crypto.encryptWithSalt(
+				password)
 			await db.beginTransaction()
-			await db.query(query, [name, nickname, phone, enlist, encryptedPassword, salt])
+			await db.query(query,
+				[name, nickname, phone, enlist, encryptedPassword, salt])
 			await db.commit()
 		} catch (err) {
 			console.error(err)
@@ -35,7 +37,9 @@ export default class UserTable {
 	 */
 	static async findOneUserByPhone (phone) {
 		const query = `
-			SELECT * FROM user WHERE phone = ?;
+            SELECT *
+            FROM user
+            WHERE phone = ?;
 		`
 		try {
 			await db.beginTransaction()
@@ -56,7 +60,8 @@ export default class UserTable {
 	 */
 	static async findAllUsers () {
 		const query = `
-			SELECT * FROM user;
+            SELECT *
+            FROM user;
 		`
 		try {
 			await db.beginTransaction()
@@ -103,11 +108,12 @@ export default class UserTable {
 	 */
 	static async updatePassword (phone, newPassword) {
 		try {
-			const { encryptedPassword, salt } = await Crypto.encryptWithSalt(newPassword)
+			const { encryptedPassword, salt } = await Crypto.encryptWithSalt(
+				newPassword)
 			const query = `
                 UPDATE user
                 SET password = "${encryptedPassword}",
-                    salt = "${salt}"
+                    salt     = "${salt}"
 			`
 			await db.beginTransaction()
 			await db.query(query)
@@ -119,6 +125,29 @@ export default class UserTable {
 			db.release()
 		}
 	}
-}
 
-await UserTable.updatePassword('01090277906', 'newPassword')
+	/**
+	 *
+	 * @param phone {string}
+	 * @returns {Promise<void>}
+	 */
+	static async makeAdmin (phone) {
+		const [[result]] = await db.query(`
+            SELECT admin
+            FROM user
+            WHERE phone = "${phone}"
+		`)
+
+		const { admin: isAdmin } = result
+
+		if (isAdmin) {
+			throw new Error('Given user is already an admin!')
+		}
+
+		await db.query(`
+			UPDATE user
+			SET admin = 1
+			WHERE phone = "${phone}"
+		`)
+	}
+}
