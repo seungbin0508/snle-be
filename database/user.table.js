@@ -94,4 +94,31 @@ export default class UserTable {
 			db.release()
 		}
 	}
+
+	/**
+	 *
+	 * @param phone {string}
+	 * @param newPassword {string}
+	 * @returns {Promise<void>}
+	 */
+	static async updatePassword (phone, newPassword) {
+		try {
+			const { encryptedPassword, salt } = await Crypto.encryptWithSalt(newPassword)
+			const query = `
+                UPDATE user
+                SET password = "${encryptedPassword}",
+                    salt = "${salt}"
+			`
+			await db.beginTransaction()
+			await db.query(query)
+			await db.commit()
+		} catch (err) {
+			console.error(err)
+			await db.rollback()
+		} finally {
+			db.release()
+		}
+	}
 }
+
+await UserTable.updatePassword('01090277906', 'newPassword')
