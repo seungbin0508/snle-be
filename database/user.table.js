@@ -150,4 +150,21 @@ export default class UserTable {
 			WHERE phone = "${phone}"
 		`)
 	}
+
+	/**
+	 * @param phone {string}
+	 * @returns {Promise<void>}
+	 */
+	static async withdrawUser (phone) {
+		const today = new Date().toISOString().split('T')[0]
+		try {
+			await db.query(`
+				UPDATE user
+				SET withdrawal = "${today}"
+				WHERE phone = "${phone}"
+			`)
+		} catch (err) {
+			console.error(err)
+		}
+	}
 }
