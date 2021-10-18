@@ -4,7 +4,8 @@
   "description": "API server for SNLE",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon index.js"
+    "start": "npx nodemon index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "author": "SeungBin Kim <seungbin0508@gmail.com> (https://github.com/seungbin0508)",
   "license": "ISC",
@@ -12,6 +13,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jest": "^27.3.0",
     "mysql2": "^2.3.0",
     "nodemon": "^2.0.13",
     "npm": "^8.1.0"
