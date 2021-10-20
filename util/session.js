@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken'
+import redisClient from './redis.js'
+import UserTable from '../database/user.table.js'
 
 export default class Session {
 	/**
@@ -36,5 +38,16 @@ export default class Session {
 			algorithm: 'HS256',
 			expiresIn: '14d'
 		})
+	}
+
+	static async verifyRefreshToken (token, phone) {
+		try {
+			token.verify(token, process.env.JWTSECRET)
+			const savedToken = await redisClient.get(phone)
+			return token === savedToken
+		} catch (err) {
+			console.error(err)
+			return false
+		}
 	}
 }
