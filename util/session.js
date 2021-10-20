@@ -30,4 +30,11 @@ export default class Session {
 			return { success: false }
 		}
 	}
+
+	static getRefreshToken () {
+		return jwt.sign({}, process.env.JWTSECRET, {
+			algorithm: 'HS256',
+			expiresIn: '14d'
+		})
+	}
 }
