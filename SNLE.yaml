@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: SNLE API Document
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /users:
+    post:
+      summary: Sign up a user
+      operationId: postUser
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: 'Sign up success'
+    get:
+      summary: Return all users
+      operationId: getUsers
+      tags:
+        - user
+      responses:
+        '200':
+          description: 'List of all users'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Return a user
+      operationId: getUser
+      tags:
+        - user
+      responses:
+        '200':
+          description: 'A user information'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      summary: Delete a user
+      operationId: deleteUser
+      tags:
+        - user
+      responses:
+        '204':
+          description: 'User successfully deleted'
+  /users/{userId}/temp:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    patch:
+      summary: Make regular user
+      tags:
+        - user
+      responses:
+        '201':
+          description: 'User successfully became a regular'
+  /signin:
+    post:
+      summary: 'Sign in a user'
+      operationId: signIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  pattern: '010\d{7,8}'
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: 'Sign in success'
+          content:
+            application/jwt:
+              schema:
+                type: string
+                example: 'JWT'
+components:
+  schemas:
+    User:
+      type: object
+      required: [name,phone, join]
+      properties:
+        name:
+          type: string
+          pattern: '[가-힣]+'
+        nickname:
+          type: string
+        password:
+          type: string
+          format: password
+          example: sn1e$ecret
+        phone:
+          type: string
+          pattern: '010\d{7,8}'
+          description: Korean mobile phone number without hyphen
+        join:
+          type: string
+          format: date
+          readOnly: true
+        temporary:
+          type: boolean
+          readOnly: true
+          default: true
+        withdrawal:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        participation:
+          type: integer
+          readOnly: true
+          default: 50
+        admin:
+          type: boolean
+          default: false
+          readOnly: true
+        salt:
+          type: string
+          readOnly: true
+  securitySchemes:
+    bearerauth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
