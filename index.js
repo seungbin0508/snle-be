@@ -1,10 +1,9 @@
 import express from 'express'
+import router from './routes/index.js'
 
 const app = express()
 
-app.get('/', ((req, res) => {
-	return res.send('Hello World!')
-}))
+app.use(router)
 
 app.listen(3000, () => {
 	console.log('Server listening at port 3000')
