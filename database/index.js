@@ -30,7 +30,8 @@ create table IF NOT EXISTS user
 	admin tinyint(1) default 0 not null,
 	password varchar(128) null,
     salt char(128) null,
-    temp tinyint(1) default 1
+    temp tinyint(1) default 1,
+    ban tinyint(1) default 0 not null;
 );`
 	await connection.query(createDatabase)
 	await connection.query(useDatabase)
