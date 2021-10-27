@@ -184,4 +184,21 @@ export default class UserTable {
 			console.error(err)
 		}
 	}
+
+	/**
+	 *
+	 * @param memberId {string}
+	 * @returns {Promise<void>}
+	 */
+	static async banMember (memberId) {
+		try {
+			await db.query(`
+				UPDATE user
+				SET ban = 1
+				WHERE phone = "${memberId}";
+			`)
+		} catch (err) {
+			console.error(err)
+		}
+	}
 }
