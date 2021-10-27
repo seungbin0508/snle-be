@@ -58,10 +58,10 @@ export default class UserTable {
 	 * Find all users from user table
 	 * @returns {Promise<Object[]>}
 	 */
-	static async findAllUsers () {
+	static async findAllUsers (optionQuery) {
 		const query = `
             SELECT *
-            FROM user;
+            FROM user ${optionQuery};
 		`
 		try {
 			await db.beginTransaction()
