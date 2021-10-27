@@ -26,10 +26,11 @@ create table IF NOT EXISTS user
 	phone varchar(11) not null primary key unique,
 	enlist date not null,
 	withdrawal date null,
-	participation smallint default 100 null,
-	admin tinyint(1) default 0 null,
+	participation smallint default 100 not null,
+	admin tinyint(1) default 0 not null,
 	password varchar(128) null,
-    salt char(128) null
+    salt char(128) null,
+    temp tinyint(1) default 1
 );`
 	await connection.query(createDatabase)
 	await connection.query(useDatabase)
