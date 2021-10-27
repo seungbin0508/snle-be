@@ -114,6 +114,7 @@ export default class UserTable {
                 UPDATE user
                 SET password = "${encryptedPassword}",
                     salt     = "${salt}"
+				WHERE phone = "${phone}";
 			`
 			await db.beginTransaction()
 			await db.query(query)
