@@ -19,4 +19,27 @@ export default class AdminController {
 
 		return admin
 	}
+
+	static async approveNewMember (req, res, next) {
+		const { memberId: targetMemberId } = req.params
+
+		if (!targetMemberId) {
+			const error = {
+				message: 'memberId is missing!',
+				status: 400,
+				type: 'Invalid Parameter'
+			}
+			return next(error)
+		}
+
+		const targetMember = await UserTable.findOneUserByPhone(targetMemberId)
+		if (!targetMember) {
+			const error = {
+				message: "Member under given ID doesn't exist!",
+				status: 400,
+				type: 'Invalid Parameter'
+			}
+			return next(error)
+		}
+	}
 }
