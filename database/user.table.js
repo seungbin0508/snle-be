@@ -58,10 +58,10 @@ export default class UserTable {
 	 * Find all users from user table
 	 * @returns {Promise<Object[]>}
 	 */
-	static async findAllUsers () {
+	static async findAllUsers (optionQuery) {
 		const query = `
             SELECT *
-            FROM user;
+            FROM user ${optionQuery};
 		`
 		try {
 			await db.beginTransaction()
@@ -114,6 +114,7 @@ export default class UserTable {
                 UPDATE user
                 SET password = "${encryptedPassword}",
                     salt     = "${salt}"
+				WHERE phone = "${phone}";
 			`
 			await db.beginTransaction()
 			await db.query(query)
@@ -162,6 +163,40 @@ export default class UserTable {
 				UPDATE user
 				SET withdrawal = "${today}"
 				WHERE phone = "${phone}"
+			`)
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	/**
+	 *
+	 * @param memberId {string}
+	 * @returns {Promise<void>}
+	 */
+	static async approveMember (memberId) {
+		try {
+			await db.query(`
+				UPDATE user
+				SET temp = 0
+				WHERE phone = "${memberId}"
+			`)
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	/**
+	 *
+	 * @param memberId {string}
+	 * @returns {Promise<void>}
+	 */
+	static async banMember (memberId) {
+		try {
+			await db.query(`
+				UPDATE user
+				SET ban = 1
+				WHERE phone = "${memberId}";
 			`)
 		} catch (err) {
 			console.error(err)
