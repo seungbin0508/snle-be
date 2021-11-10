@@ -23,6 +23,12 @@ describe('Member test', () => {
 		}
 	})
 
+	it("should update the member's nickname to 안준호", async () => {
+		await UserTable.updateUser(phone, 'nickname', '안준호')
+		const user = await UserTable.findOneUserByPhone(phone)
+		expect(user.name).toBe('정해인')
+	})
+
 	afterAll(async () => {
 		const query = `
             DELETE FROM user
