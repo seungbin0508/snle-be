@@ -10,7 +10,10 @@ describe('Member test', () => {
 			{ name, phone, password: '1234', enlist: new Date() })
 
 	})
-
+	it('should find user called 정해인 by phone number', async () => {
+		const user = await UserTable.findOneUserByPhone(phone)
+		await expect(user.name).toBe(name)
+	})
 
 	afterAll(async () => {
 		const query = `
