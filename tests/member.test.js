@@ -15,6 +15,14 @@ describe('Member test', () => {
 		await expect(user.name).toBe(name)
 	})
 
+	it('should throw an error when creating user with duplicate phone number', async () => {
+		try {
+			await UserTable.createUser({ name, phone, password: '5678', enlist: new Date()})
+		} catch (err) {
+			expect(err.message).toBe("Duplicate entry '01012345678' for key 'user.PRIMARY'")
+		}
+	})
+
 	afterAll(async () => {
 		const query = `
             DELETE FROM user
