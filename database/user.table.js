@@ -22,9 +22,8 @@ export default class UserTable {
 				[name, nickname, phone, enlist, encryptedPassword, salt])
 			await db.commit()
 		} catch (err) {
-			console.error(err)
 			await db.rollback()
-			console.log('not working')
+			throw err
 		} finally {
 			db.release()
 		}
