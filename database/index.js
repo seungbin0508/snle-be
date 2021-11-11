@@ -31,7 +31,7 @@ create table IF NOT EXISTS user
 	password varchar(128) null,
     salt char(128) null,
     temp tinyint(1) default 1,
-    ban tinyint(1) default 0 not null;
+    ban tinyint(1) default 0 not null
 );`
 	await connection.query(createDatabase)
 	await connection.query(useDatabase)
