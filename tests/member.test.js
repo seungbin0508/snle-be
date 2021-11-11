@@ -1,5 +1,6 @@
 import UserTable from '../database/user.table.js'
 import db from '../database/index.js'
+import Crypto from '../util/crypto.js'
 
 describe('Member test', () => {
 	const phone = '01012345678'
@@ -27,6 +28,18 @@ describe('Member test', () => {
 		await UserTable.updateUser(phone, 'nickname', '안준호')
 		const user = await UserTable.findOneUserByPhone(phone)
 		expect(user.name).toBe('정해인')
+	})
+
+	it('should be able to update password', async () => {
+		const newPassword = '5678'
+		await UserTable.updatePassword(phone, newPassword)
+		const {
+			password: savedPassword,
+			salt
+		} = await UserTable.findOneUserByPhone(phone)
+		const { encryptedPassword } = await Crypto.encryptWithSalt(newPassword,
+			salt)
+		expect(savedPassword).toBe(encryptedPassword)
 	})
 
 	afterAll(async () => {
