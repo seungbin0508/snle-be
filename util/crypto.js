@@ -7,7 +7,7 @@ export default class Crypto {
 	/**
 	 *
 	 * @param password {string}
-	 * @param [salt]
+	 * @param [salt] {string}
 	 * @returns {Promise<{encryptedPassword: string, salt: string}>}
 	 */
 	static async encryptWithSalt(password, salt) {
